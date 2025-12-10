@@ -5,22 +5,22 @@
 
 long long wud_getFileSize64(FILE* file)
 {
-	long long prevSeek = ftello64(file);
-	fseeko64(file, 0, SEEK_END);
-	long long fileSize = ftello64(file);
-	fseeko64(file, prevSeek, SEEK_SET);
+	long long prevSeek = WUD_FTELLO(file);
+	WUD_FSEEKO(file, 0, SEEK_END);
+	long long fileSize = WUD_FTELLO(file);
+	WUD_FSEEKO(file, prevSeek, SEEK_SET);
 	return fileSize;
 }
 
 long long wud_getCurrentSeek64(FILE* file)
 {
-	long long currentSeek = ftello64(file);
+	long long currentSeek = WUD_FTELLO(file);
 	return currentSeek;
 }
 
 void wud_setCurrentSeek64(FILE* file, long long newSeek)
 {
-	fseeko64(file, newSeek, SEEK_SET);
+	WUD_FSEEKO(file, newSeek, SEEK_SET);
 }
 
 /*

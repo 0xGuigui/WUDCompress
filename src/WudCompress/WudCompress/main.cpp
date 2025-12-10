@@ -1,8 +1,7 @@
-#include<stdio.h>
-#include<stdlib.h>
-#include<string.h>
-#include<strings.h>
-#include"wud.h"
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include "wud.h"
 
 /*
  * WUX file structure (v1.0):
@@ -136,13 +135,13 @@ bool compressWUD(wud_t* inputFile, FILE* outputFile, char* outputPath)
 	unsigned int sectorTableEntryCount = (unsigned int)((inputSize+SECTOR_SIZE-1) / (long long)SECTOR_SIZE);
 
 	// remember current seek offset, this is where the index table will be written after compression is done
-	long long offsetIndexTable = ftello64(outputFile);
+	long long offsetIndexTable = WUD_FTELLO(outputFile);
 	// skip index table and padding
 	long long offsetSectorArrayStart = (offsetIndexTable + (long long)sectorTableEntryCount*sizeof(unsigned int));
 	// align to SECTOR_SIZE
 	offsetSectorArrayStart = (offsetSectorArrayStart + SECTOR_SIZE - 1);
 	offsetSectorArrayStart = offsetSectorArrayStart - (offsetSectorArrayStart%SECTOR_SIZE);
-	fseeko64(outputFile, offsetSectorArrayStart, SEEK_SET);
+	WUD_FSEEKO(outputFile, offsetSectorArrayStart, SEEK_SET);
 
 	unsigned int indexTableSize = sizeof(unsigned int) * sectorTableEntryCount;
 	unsigned int* sectorIndexTable = (unsigned int*)malloc(sizeof(unsigned int) * sectorTableEntryCount);
@@ -192,7 +191,7 @@ bool compressWUD(wud_t* inputFile, FILE* outputFile, char* outputPath)
 		storedSectors++;
 	}
 	printf("100%%   \n");
-	fseeko64(outputFile, offsetIndexTable, SEEK_SET);
+	WUD_FSEEKO(outputFile, offsetIndexTable, SEEK_SET);
 	fwrite(sectorIndexTable, sectorTableEntryCount, sizeof(unsigned int), outputFile);
 	fclose(outputFile);
 	puts("done");
@@ -250,7 +249,7 @@ int main(int argc, char *argv[])
 	bool skipVerify = false;
 	for(int i=2; i<argc; i++)
 	{
-		if( strcasecmp(argv[i], "-noverify") == 0 )
+		if( WUD_STRCASECMP(argv[i], "-noverify") == 0 )
 		{
 			skipVerify = true;
 		}

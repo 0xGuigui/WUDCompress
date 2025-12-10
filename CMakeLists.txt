@@ -11,3 +11,8 @@ add_executable(WudCompress
 
 # Add the directory containing wud.h to the include paths
 target_include_directories(WudCompress PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/src/WudCompress/WudCompress")
+
+# Ensure large-file offsets on POSIX
+if(NOT WIN32)
+    target_compile_definitions(WudCompress PRIVATE _FILE_OFFSET_BITS=64)
+endif()

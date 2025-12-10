@@ -1,4 +1,21 @@
-typedef struct 
+#ifndef WUD_H
+#define WUD_H
+
+#include <stdio.h>
+#include <string.h>
+
+#ifdef _WIN32
+#define WUD_FSEEKO _fseeki64
+#define WUD_FTELLO _ftelli64
+#define WUD_STRCASECMP _stricmp
+#else
+#include <strings.h>
+#define WUD_FSEEKO fseeko
+#define WUD_FTELLO ftello
+#define WUD_STRCASECMP strcasecmp
+#endif
+
+typedef struct
 {
 	unsigned int		magic0;
 	unsigned int		magic1;
@@ -7,7 +24,7 @@ typedef struct
 	unsigned int		flags;
 }wuxHeader_t;
 
-typedef struct  
+typedef struct
 {
 	FILE*			fileWud;
 	long long		uncompressedSize;
@@ -30,3 +47,5 @@ void wud_close(wud_t* wud);
 unsigned int wud_readData(wud_t* wud, void* buffer, unsigned int length, long long offset);
 bool wud_isWUXCompressed(wud_t* wud);
 long long wud_getWUDSize(wud_t* wud);
+
+#endif // WUD_H
